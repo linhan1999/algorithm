@@ -21,9 +21,9 @@ public:
 	node* root;
 	void tree_insert(node* p);
 private:
-	node* LL(node *p);	//LL平衡旋转（右单旋转）	1 -> 2
+	node* LL(node *p);	//LL平衡旋转（右单旋转） 	 1 -> 2
 	node* RR(node *p);	//RR平衡旋转（左单旋转）	-1 -> -2
-	node* LR(node *p);  //LR平衡旋转（先左后右双旋转）	1 -> 2
+	node* LR(node *p);  //LR平衡旋转（先左后右双旋转）  1 -> 2
 	node* RL(node *p);  //RL平衡旋转（先右后左双旋转） -1 -> -2
 	
 	int node_num; //结点个数	
