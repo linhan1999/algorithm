@@ -1,18 +1,14 @@
 template <class K, class V>
 class AVLNode {
+	typedef AVLNode<K, V> node;
 public:
 	K _key;
 	V _value;
 	int _bf;
-	AVLNode<K, V>* _left;
-	AVLNode<K, V>* _right;
-	AVLNode<K, V>* _parent;
-
-	AVLNode(const K& key, const V& value)
-		:_key(key), _value(value), _bf(0), _left(NULL), _right(NULL), _parent(NULL)
-	{
-
-	}
+	node* _left;
+	node* _right;
+	node* _parent;
+	AVLNode(const K& key, const V& value):_key(key), _value(value), _bf(0), _left(NULL), _right(NULL), _parent(NULL){}
 };
 /*
 1.每个节点都有一个平衡因子，大小为右子树高度-左子树的高度。
@@ -24,9 +20,7 @@ template <class K, class V>
 class AVLTree {
 	typedef AVLNode<K, V> Node;
 public:
-	AVLTree()
-		:_root(NULL)
-	{}
+	AVLTree():_root(NULL){}
 
 	void Insert(const K& key, const V& value)
 	{
@@ -80,18 +74,18 @@ public:
 			else {//2或-2
 				if (parent->_bf == 2) {
 					if (cur->_bf == 1) {
-						RotateLeft(parent);
+						LL(parent);
 					}
 					else {//cur->_bf == -1
-						RotateRL(parent);
+						RL(parent);
 					}
 				}
 				else {//parent->_bf == -2
 					if (cur->_bf == 1) {
-						RotateLR(parent);
+						LR(parent);
 					}
 					else {//cur->_bf == -1
-						RotateRight(parent);
+						RR(parent);
 					}
 				}
 				parent->_bf = 0;
@@ -103,7 +97,7 @@ public:
 	}
 
 private:
-	void RotateRight(Node* parent)//parent->_bf == -2 && cur->_bf == -1
+	void RR(Node* parent)//parent->_bf == -2 && cur->_bf == -1
 	{
 		Node* cur = parent->_left;//cur
 
@@ -118,22 +112,16 @@ private:
 		parent->_parent = cur;//更新parent的父节点
 
 							  //把cur与parent之前的父节点连接
-		if (parent == _root)//如果之前的parent就是根，直接把根变成cur
-		{
+		if (parent == _root){//如果之前的parent就是根，直接把根变成cur
 			_root = cur;
 			_root->_parent = NULL;
 		}
-		else//如果之前的parent有父节点，那么就要连接
-		{
+		else{//如果之前的parent有父节点，那么就要连接	
 			if (node->_left == parent)
-			{
 				node->_left = cur;
-
-			}
 			else
-			{
 				node->_right = cur;
-			}
+
 			cur->_parent = node;
 
 			node->_bf = 0;
@@ -141,8 +129,7 @@ private:
 		}
 	}
 
-	void RotateLeft(Node* parent)//parent->_bf == 2 && cur->_bf == 1
-	{
+	void LL(Node* parent){//parent->_bf == 2 && cur->_bf == 1
 		Node* cur = parent->_right;
 		Node* left = cur->_left;
 
@@ -160,24 +147,21 @@ private:
 			_root->_parent = NULL;
 		}
 		else {
-			if (node->_left == parent) {
+			if (node->_left == parent) 
 				node->_left = cur;
-			}
-			else {
+			else 
 				node->_right = cur;
-			}
+
 			cur->_parent = node;
 		}
 	}
 
-	void RotateRL(Node* parent)//parent->_bf == 2 && cur->_bf == -1
-	{
+	void RL(Node* parent){//parent->_bf == 2 && cur->_bf == -1	
 		RotateRight(parent->_right);
 		RotateLeft(parent);
 	}
 
-	void RotateLR(Node* parent)//parent->_bf == -2 && cur->_bf == 1
-	{
+	void LR(Node* parent){//parent->_bf == -2 && cur->_bf == 1	
 		RotateLeft(parent->_left);
 		RotateRight(parent);
 	}
